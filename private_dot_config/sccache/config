@@ -1,0 +1,4 @@
+# vim: filetype=toml
+[cache.disk]
+dir = "/home/scott/.cache/sccache"
+size = "50GB"

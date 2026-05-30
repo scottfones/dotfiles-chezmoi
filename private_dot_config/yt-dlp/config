@@ -1,0 +1,8 @@
+# yt-dlp global config.
+--cookies-from-browser firefox
+
+--format-sort res,fps,vcodec:vp9:avc1,acodec:opus:aac
+
+--sub-langs en.*
+--write-subs
+--write-auto-subs

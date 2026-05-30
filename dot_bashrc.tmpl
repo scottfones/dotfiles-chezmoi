@@ -1,0 +1,37 @@
+#
+# ~/.bashrc
+#
+
+# If not running interactively, don't do anything
+[[ $- != *i* ]] && return
+
+# Import systemd user environment.d vars
+if [ -d "$HOME/.config/environment.d" ]; then
+  set -a
+  for _envfile in "$HOME/.config/environment.d/"*.conf; do
+    [ -r "$_envfile" ] && . "$_envfile"
+  done
+  unset _envfile
+  set +a
+fi
+
+alias ls='ls --color=auto'
+alias grep='grep --color=auto'
+{{ if ne .chezmoi.hostname "omega" -}}
+alias wezterm='/home/scott/Applications/Wezterm/wezterm/target/release/wezterm --config-file /home/scott/.config/wezterm/wezterm.lua'
+{{ end }}
+PS1='[\u@\h \W]\$ '
+
+# Ruby user gem binaries (e.g. neovim-ruby-host, bundler if installed)
+for _gem_bin in "$HOME/.local/share/gem/ruby/"*/bin; do
+    [ -d "$_gem_bin" ] || continue
+    case ":$PATH:" in
+        *":$_gem_bin:"*) ;;
+        *) export PATH="$_gem_bin:$PATH" ;;
+    esac
+done
+unset _gem_bin
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"                   # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" # This loads nvm bash_completion

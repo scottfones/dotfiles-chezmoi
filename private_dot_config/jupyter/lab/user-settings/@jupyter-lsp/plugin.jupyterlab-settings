@@ -1,0 +1,6 @@
+{
+  "ask_before_closing_no_tabs": false,
+  "loggingConsole": "browser",
+  "loggingLevel": "warn",
+  "setTrace": null
+}

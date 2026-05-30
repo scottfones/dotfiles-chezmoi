@@ -1,0 +1,11 @@
+[Unit]
+Description=Cache vivid LS_COLORS into environment.d
+ConditionFileIsExecutable=%h/.cargo/bin/vivid
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=%h/.config/systemd/user/ls-colors-cache.sh
+
+[Install]
+WantedBy=default.target

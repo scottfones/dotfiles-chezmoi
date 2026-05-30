@@ -1,0 +1,37 @@
+local wezterm = require("wezterm")
+
+local config = wezterm.config_builder()
+
+config.term = "wezterm"
+
+config.default_prog = { "/usr/bin/fish", "-l" }
+
+-- Config modules
+local startup_settings = require("startup")
+startup_settings.apply_to_config(config)
+
+local window_settings = require("window")
+window_settings.apply_to_config(config)
+
+local maximize_settings = require("maximize")
+maximize_settings.apply_to_config(config)
+
+local tabbar_settings = require("tabbar")
+tabbar_settings.apply_to_config(config)
+
+local font_settings = require("fonts")
+font_settings.apply_to_config(config)
+
+local cursor_settings = require("cursor")
+cursor_settings.apply_to_config(config)
+
+local keymap_settings = require("keymaps")
+keymap_settings.apply_to_config(config)
+
+local ssh_settings = require("ssh")
+ssh_settings.apply_to_config(config)
+
+local launch_menu_settings = require("launch_menu")
+launch_menu_settings.apply_to_config(config)
+
+return config

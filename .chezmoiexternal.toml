@@ -1,0 +1,9 @@
+{{- $repos := list "nvim" "claude-starship-rs" "git-last-commit-rs" -}}
+{{ range $repos }}
+[".config/{{ . }}"]
+    type = "git-repo"
+    url = "https://github.com/scottfones/{{ . }}.git"
+    refreshPeriod = "168h"
+    [".config/{{ . }}".pull]
+        args = ["--ff-only"]
+{{ end }}

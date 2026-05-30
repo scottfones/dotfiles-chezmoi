@@ -1,0 +1,43 @@
+# Security-sensitive files
+jupyter_cookie_secret
+*.key
+*.pem
+
+# Generated/runtime config
+jupyter_server_config.json
+jupyter_notebook_config.json
+
+# Dynamically loaded config snippets
+jupyter_server_config.d/
+jupyter_notebook_config.d/
+
+# Migration markers
+migrated
+
+# Backup files
+*.backup
+*.py.backup
+*.bak
+*~
+
+# IPython/Jupyter history
+/history
+.ipython_history
+
+# Database files
+nbsignatures.db
+*.sqlite
+*.db
+
+# Log files
+*.log
+
+# Checkpoints directory for Jupyter notebooks
+.ipynb_checkpoints/
+
+# Workspace layouts (session-specific)
+lab/workspaces/
+
+# Runtime data
+__pycache__/
+*.py[cod]

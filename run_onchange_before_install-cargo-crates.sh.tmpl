@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+# Restore the cargo toolchain from the backed-up list (.chezmoitemplates/
+# cargo-crates.txt). Runs before externals/build so sccache exists first.
+# sccache is disabled for installs to break the bootstrap cycle (you can't
+# compile-via-sccache the crate that provides sccache).
+set -euo pipefail
+
+command -v cargo >/dev/null || { echo "cargo not found; skipping crate install"; exit 0; }
+
+have="$(cargo install --list | grep -E '^[^[:space:]]' | sed 's/ .*//')"
+while IFS= read -r crate; do
+    [ -n "$crate" ] || continue
+    grep -qxF "$crate" <<<"$have" || { echo "cargo install ${crate}"; RUSTC_WRAPPER= cargo install "$crate"; }
+done <<'CRATES'
+{{ includeTemplate "cargo-crates.txt" . }}
+CRATES

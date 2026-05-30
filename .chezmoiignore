@@ -1,0 +1,24 @@
+# chezmoi ignore manifest
+
+# Generated artifacts
+.config/environment.d/ls-colors.conf
+
+# Omega ignores
+{{- if eq .chezmoi.hostname "omega" }}
+.config/kitty
+.config/wezterm
+.config/mpv
+.config/electron-flags.conf
+.config/fish/functions/chrome-webgpu.fish
+.config/fish/functions/mount-omega.fish
+.config/fish/functions/mpv-ani.fish
+.config/environment.d/steam.conf
+{{- end }}
+
+#  Zeta exclusive
+{{- if ne .chezmoi.hostname "zeta" }}
+.config/fish/functions/webmd.fish
+.config/system_etc/thinkfan.conf
+.config/system_etc/modprobe.d/thinkpad-psmouse.conf
+.config/systemd/user/dev-tunnel-omega.service
+{{- end }}
