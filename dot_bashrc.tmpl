@@ -17,12 +17,15 @@ fi
 
 alias ls='ls --color=auto'
 alias grep='grep --color=auto'
-{{ if ne .chezmoi.hostname "omega" -}}
+alias vim='nvim'
+
+{{- if ne .chezmoi.hostname "omega" }}
 alias wezterm='/home/scott/Applications/Wezterm/wezterm/target/release/wezterm --config-file /home/scott/.config/wezterm/wezterm.lua'
-{{ end }}
+{{- end }}
+
 PS1='[\u@\h \W]\$ '
 
-# Ruby user gem binaries (e.g. neovim-ruby-host, bundler if installed)
+# Ruby user gem binaries
 for _gem_bin in "$HOME/.local/share/gem/ruby/"*/bin; do
     [ -d "$_gem_bin" ] || continue
     case ":$PATH:" in
