@@ -6,13 +6,15 @@
 # Omega ignores
 {{- if eq .chezmoi.hostname "omega" }}
 .config/kitty
-.config/wezterm
 .config/mpv
+.config/wezterm
+
 .config/electron-flags.conf
+.config/environment.d/steam.conf
 .config/fish/functions/chrome-webgpu.fish
 .config/fish/functions/mount-omega.fish
 .config/fish/functions/mpv-ani.fish
-.config/environment.d/steam.conf
+.config/user-dirs.dirs
 {{- end }}
 
 #  Zeta exclusive
