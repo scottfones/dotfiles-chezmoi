@@ -1,8 +1,5 @@
 #!/usr/bin/env bash
-# Restore the cargo toolchain from the backed-up list (.chezmoitemplates/
-# cargo-crates.txt). Runs before externals/build so sccache exists first.
-# sccache is disabled for installs to break the bootstrap cycle (you can't
-# compile-via-sccache the crate that provides sccache).
+# Restore user-space, cargo-installed applications.
 set -euo pipefail
 
 command -v cargo >/dev/null || { echo "cargo not found; skipping crate install"; exit 0; }

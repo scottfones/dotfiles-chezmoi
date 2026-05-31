@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
-# Pick up newly-written user units and generate the LS_COLORS cache now,
-# rather than waiting for the next login. The service self-guards on vivid.
+# Refresh systemd user units and generate required artifacts.
 set -euo pipefail
 
 command -v systemctl >/dev/null || exit 0
