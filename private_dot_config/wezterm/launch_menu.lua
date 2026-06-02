@@ -4,60 +4,110 @@ local wezterm = require("wezterm")
 
 local module = {}
 
-local workspaces = {
+local function attach(pane, session)
+	pane:send_text("tmux new-session -A -D -s " .. session .. "\r")
+end
+
+-- Baseline window.
+local baseline = {
+	{ domain = "local", session = "debug" },
+	{ domain = "local", session = "terminal" },
+	{ domain = "local", session = "media" },
+	{ domain = "theta", session = "terminal" },
+	{ domain = "pi", session = "terminal" },
+	{ domain = "psi", session = "terminal" },
+	{ domain = "omega", session = "terminal" },
+}
+
+-- Coding window.
+local coding_domain = "omega"
+local coding = { "utility", "editor", "claude" }
+
+-- Spawn a tab in mux_win on the given domain and attach the session.
+local function spawn_attached(mux_win, domain, session)
+	local spawn_args = {}
+	if domain ~= "local" then
+		spawn_args.domain = { DomainName = domain }
+	end
+	local _, new_pane = mux_win:spawn_tab(spawn_args)
+	if domain == "local" then
+		attach(new_pane, session)
+	else
+		wezterm.time.call_after(0.5, function()
+			attach(new_pane, session)
+		end)
+	end
+end
+
+-- Build the baseline into the current window.
+-- Reuses the active pane as tab 1.
+local function build_baseline(window, pane)
+	local mux_win = window:mux_window()
+	attach(pane, baseline[1].session)
+	for i = 2, #baseline do
+		spawn_attached(mux_win, baseline[i].domain, baseline[i].session)
+	end
+end
+
+-- Open the coding window and tabs.
+local function open_coding()
+	local _, first_pane, new_window = wezterm.mux.spawn_window({
+		domain = { DomainName = coding_domain },
+	})
+	wezterm.time.call_after(0.5, function()
+		attach(first_pane, coding[1])
+	end)
+	for i = 2, #coding do
+		spawn_attached(new_window, coding_domain, coding[i])
+	end
+end
+
+-- Spawn a remote terminal session.
+local function new_tab_on(window, domain)
+	spawn_attached(window:mux_window(), domain, "terminal")
+end
+
+-- Menu entries. Each action receives (window, pane).
+local menu = {
+	{ label = "build baseline", action = build_baseline },
 	{
-		label = "omega: coding",
-		domain = "omega",
-		sessions = { "utility", "editor", "claude" },
+		label = "coding (omega)",
+		action = function()
+			open_coding()
+		end,
 	},
 	{
-		label = "omega: universal",
-		domain = "omega",
-		sessions = { "universal" },
+		label = "new tab: theta",
+		action = function(w)
+			new_tab_on(w, "theta")
+		end,
 	},
 	{
-		label = "pi: universal",
-		domain = "pi",
-		sessions = { "universal" },
+		label = "new tab: pi",
+		action = function(w)
+			new_tab_on(w, "pi")
+		end,
 	},
 	{
-		label = "psi: universal",
-		domain = "psi",
-		sessions = { "universal" },
+		label = "new tab: psi",
+		action = function(w)
+			new_tab_on(w, "psi")
+		end,
 	},
 	{
-		label = "theta: universal",
-		domain = "theta",
-		sessions = { "universal" },
+		label = "new tab: omega",
+		action = function(w)
+			new_tab_on(w, "omega")
+		end,
 	},
 }
 
-local function workspace_choices()
+local function menu_choices()
 	local choices = {}
-	for i, ws in ipairs(workspaces) do
-		table.insert(choices, { label = ws.label, id = tostring(i) })
+	for i, entry in ipairs(menu) do
+		table.insert(choices, { label = entry.label, id = tostring(i) })
 	end
 	return choices
-end
-
-local function attach_tmux(pane, session)
-	pane:send_text("tmux a -t " .. session .. "\r")
-end
-
-local function open_workspace(workspace)
-	local _, first_pane, new_window = wezterm.mux.spawn_window({
-		domain = { DomainName = workspace.domain },
-	})
-	-- delay call for connection and init timing
-	wezterm.time.call_after(0.5, function()
-		attach_tmux(first_pane, workspace.sessions[1])
-	end)
-	for i = 2, #workspace.sessions do
-		local _, new_pane = new_window:spawn_tab({
-			domain = { DomainName = workspace.domain },
-		})
-		attach_tmux(new_pane, workspace.sessions[i])
-	end
 end
 
 function module.apply_to_config(config)
@@ -66,13 +116,13 @@ function module.apply_to_config(config)
 		key = "O",
 		mods = "CTRL|SHIFT",
 		action = wezterm.action.InputSelector({
-			title = "Open workspace",
-			choices = workspace_choices(),
+			title = "Launch",
+			choices = menu_choices(),
 			action = wezterm.action_callback(function(window, pane, id, label)
 				if not id then
 					return
 				end
-				open_workspace(workspaces[tonumber(id)])
+				menu[tonumber(id)].action(window, pane)
 			end),
 		}),
 	})
