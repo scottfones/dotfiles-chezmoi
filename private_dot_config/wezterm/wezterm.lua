@@ -6,6 +6,9 @@ config.term = "wezterm"
 
 config.default_prog = { "/usr/bin/fish", "-l" }
 
+-- Inherit gcr-ssh-agent socket
+config.mux_enable_ssh_agent = false
+
 -- Config modules
 local startup_settings = require("startup")
 startup_settings.apply_to_config(config)

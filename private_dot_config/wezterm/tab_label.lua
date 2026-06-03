@@ -29,14 +29,23 @@ function M.host_key(domain, hostname)
 	return hostname and hostname:match("^[^.]+") or hostname
 end
 
+-- Strip the redundant host prefix.
+local function strip_redundant_host(content)
+	return (content:gsub("^%[[%w._-]+%]%s+", "", 1))
+end
+
 -- Produce the logical label segments.
 function M.segments(tab_index, domain, hostname, raw_title)
 	local session, content = M.parse_title(raw_title)
+	content = content or ""
+	if session ~= nil then
+		content = strip_redundant_host(content)
+	end
 	return {
 		index = tostring(tab_index),
 		host = glyphs.lookup(glyphs.host, M.host_key(domain, hostname)),
 		session = glyphs.lookup(glyphs.session, session),
-		content = content or "",
+		content = content,
 	}
 end
 
