@@ -23,4 +23,6 @@
 .config/system_etc/thinkfan.conf
 .config/system_etc/modprobe.d/thinkpad-psmouse.conf
 .config/systemd/user/dev-tunnel-omega.service
+.local/bin/clip2claude
+clip2claude-gnome-keybinding.sh
 {{- end }}
