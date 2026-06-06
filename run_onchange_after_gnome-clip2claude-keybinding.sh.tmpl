@@ -1,0 +1,24 @@
+{{- if eq .chezmoi.hostname "zeta" -}}
+#!/usr/bin/env bash
+# Bind Ctrl+Alt+C to clip2claude as a GNOME custom keyboard shortcut.
+set -euo pipefail
+
+# No-op outside a live GNOME/dbus session.
+command -v gsettings >/dev/null || exit 0
+[ -n "${DBUS_SESSION_BUS_ADDRESS:-}" ] || exit 0
+
+base=org.gnome.settings-daemon.plugins.media-keys
+kb=/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/clip2claude/
+schema="$base.custom-keybinding:$kb"
+
+current=$(gsettings get "$base" custom-keybindings)
+case "$current" in
+    *"$kb"*) : ;;                                          # already registered
+    "@as []" | "[]") gsettings set "$base" custom-keybindings "['$kb']" ;;
+    *) gsettings set "$base" custom-keybindings "${current%]*}, '$kb']" ;;
+esac
+
+gsettings set "$schema" name 'clip2claude'
+gsettings set "$schema" command "$HOME/.local/bin/clip2claude"
+gsettings set "$schema" binding '<Control><Alt>c'
+{{- end -}}
