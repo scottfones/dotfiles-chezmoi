@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+# clip2claude - rsync the newest GNOME screenshot to omega's tmpfs for claude code
+set -euo pipefail
+
+remote=omega
+dest=/tmp/claude-shots
+src="$HOME/Pictures/Screenshots"
+
+fail() {
+  notify-send -u critical clip2claude "$1"
+  exit 1
+}
+
+# Newest screenshot
+mapfile -t shots < <(
+  find "$src" -maxdepth 1 -type f -name '*.png' -printf '%T@\t%p\n' | sort -nr
+)
+((${#shots[@]})) || fail "no screenshot in $src"
+latest=${shots[0]#*$'\t'}
+
+safe=$(basename "$latest" | tr ' ' '-')
+rsync -a --mkpath "$latest" "$remote:$dest/$safe" || fail "rsync to $remote failed"
+printf '%s/%s' "$dest" "$safe" | wl-copy
+notify-send clip2claude "$safe -> $remote:$dest"
