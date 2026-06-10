@@ -29,12 +29,14 @@ local cursor_settings = require("cursor")
 cursor_settings.apply_to_config(config)
 
 local keymap_settings = require("keymaps")
-keymap_settings.apply_to_config(config)
+keymap_settings.apply_to_config(config)(
 
+{{ if eq .chezmoi.hostname "omega" -}}
 local ssh_settings = require("ssh")
 ssh_settings.apply_to_config(config)
 
 local launch_menu_settings = require("launch_menu")
 launch_menu_settings.apply_to_config(config)
 
+{{ end -}}
 return config

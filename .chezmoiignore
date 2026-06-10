@@ -6,14 +6,11 @@
 # Omega ignores
 {{- if eq .chezmoi.hostname "omega" }}
 .config/kitty
-.config/mpv
-.config/wezterm
 
 .config/electron-flags.conf
 .config/environment.d/steam.conf
 .config/fish/functions/chrome-webgpu.fish
 .config/fish/functions/mount-omega.fish
-.config/fish/functions/mpv-ani.fish
 .config/user-dirs.dirs
 {{- end }}
 
@@ -23,6 +20,10 @@
 .config/system_etc/thinkfan.conf
 .config/system_etc/modprobe.d/thinkpad-psmouse.conf
 .config/systemd/user/dev-tunnel-omega.service
+.config/wezterm/launch_menu.lua
+.config/wezterm/ssh.lua
+
 .local/bin/clip2claude
+
 clip2claude-gnome-keybinding.sh
 {{- end }}
