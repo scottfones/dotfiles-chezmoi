@@ -14,8 +14,19 @@
 .config/user-dirs.dirs
 {{- end }}
 
+#  Omega exclusive
+{{- if ne .chezmoi.hostname "omega" }}
+.config/fish/conf.d/omega.fish
+{{- end }}
+
+#  Psi exclusive
+{{- if ne .chezmoi.hostname "psi" }}
+.config/fish/conf.d/psi.fish
+{{- end }}
+
 #  Zeta exclusive
 {{- if ne .chezmoi.hostname "zeta" }}
+.config/fish/conf.d/zeta.fish
 .config/fish/functions/webmd.fish
 .config/system_etc/thinkfan.conf
 .config/system_etc/modprobe.d/thinkpad-psmouse.conf
