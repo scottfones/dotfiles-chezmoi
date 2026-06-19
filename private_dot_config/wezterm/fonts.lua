@@ -11,30 +11,9 @@ local module = {}
 -- function that accepts the config object, like this:
 function module.apply_to_config(config)
 	config.font = wezterm.font_with_fallback({
+		{ family = "FiraCode Nerd Font Propo", weight = 450 },
 		{ family = "CommitMono Nerd Font Propo", weight = "Regular" },
-		{ family = "AtkynsonMono Nerd Font Propo", weight = "Medium" },
-		{ family = "FiraCode Nerd Font Propo", weight = "Medium" },
-		{ family = "MonaspiceNe Nerd Font Propo", weight = "Medium" },
-		{
-			family = "MonaspiceNe Nerd Font Propo",
-			weight = "Medium",
-			harfbuzz_features = {
-				"kern",
-				"liga",
-				"clig",
-				"calt",
-				"ss01",
-				"ss02",
-				"ss03",
-				"ss04",
-				"ss05",
-				"ss06",
-				"ss07",
-				"ss08",
-				"ss09",
-				"ss10",
-			},
-		},
+		{ family = "MonaspiceNe Nerd Font Propo", weight = "Regular" },
 		{ family = "MonaspiceKr Nerd Font Propo", weight = "Medium" },
 		{ family = "MonaspiceAr Nerd Font Propo", weight = "Medium" },
 		{ family = "MonaspiceXe Nerd Font Propo", weight = "Medium" },
@@ -45,6 +24,7 @@ function module.apply_to_config(config)
 		{ family = "Inconsolata LGC Nerd Font Propo", weight = "Regular" },
 	})
 	config.font_size = 14.0
+	config.freetype_render_target = "HorizontalLcd"
 
 	-- Tab bar font configuration
 	config.window_frame = {
