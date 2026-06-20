@@ -1,27 +1,27 @@
-#
 # ~/.bashrc
-#
 
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
 
-# Import systemd user environment.d vars
-if [ -d "$HOME/.config/environment.d" ]; then
-  set -a
-  for _envfile in "$HOME/.config/environment.d/"*.conf; do
-    [ -r "$_envfile" ] && . "$_envfile"
+# Reset user's systemd environment vars
+_envgen=/usr/lib/systemd/user-environment-generators/30-systemd-environment-d-generator
+if [ -z "$__SHELL_ENV_IMPORTED" ] && [ -x "$_envgen" ]; then
+  while IFS= read -r _l; do
+    [ -n "$_l" ] && eval "export $_l"
+  done < <("$_envgen")
+  _dedup=; _oifs=$IFS; IFS=:
+  for _d in $PATH; do
+    case ":$_dedup:" in *":$_d:"*) ;; *) _dedup=${_dedup:+$_dedup:}$_d ;; esac
   done
-  unset _envfile
-  set +a
+  IFS=$_oifs; export PATH="$_dedup" __SHELL_ENV_IMPORTED=1
+  unset _dedup _oifs _d
 fi
+unset _envgen _l
 
-alias ls='ls --color=auto'
 alias grep='grep --color=auto'
+alias ls='ls --color=auto'
 alias vim='nvim'
-
-{{- if ne .chezmoi.hostname "omega" }}
 alias wezterm='/home/scott/Applications/Wezterm/wezterm/target/release/wezterm --config-file /home/scott/.config/wezterm/wezterm.lua'
-{{- end }}
 
 PS1='[\u@\h \W]\$ '
 
