@@ -15,6 +15,8 @@ if not set -q __SHELL_ENV_IMPORTED
     end
 end
 
+abbr -a chcd "cd (chezmoi source-path)"
+
 # Ruby user gem binaries
 for gem_bin in $HOME/.local/share/gem/ruby/*/bin
     test -d $gem_bin; and fish_add_path --prepend --path $gem_bin
