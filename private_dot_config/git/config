@@ -1,0 +1,12 @@
+[user]
+	name = Scott Fones
+	email = scott.fones@gmail.com
+	signingkey = ~/.ssh/github_ed25519.pub
+[gpg]
+	format = ssh
+[commit]
+	gpgsign = true
+[tag]
+	gpgsign = true
+[init]
+	defaultBranch = main
