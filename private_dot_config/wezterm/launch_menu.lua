@@ -10,7 +10,7 @@ end
 
 -- Baseline window.
 local baseline = {
-	{ domain = "local", session = "debug" },
+	{ domain = "local", session = "dev" },
 	{ domain = "local", session = "terminal" },
 	{ domain = "local", session = "media" },
 	{ domain = "theta", session = "terminal" },
@@ -69,7 +69,7 @@ end
 
 -- Menu entries. Each action receives (window, pane).
 local menu = {
-	{ label = "build baseline", action = build_baseline },
+	{ label = "baseline", action = build_baseline },
 	{
 		label = "coding (omega)",
 		action = function()
@@ -77,9 +77,9 @@ local menu = {
 		end,
 	},
 	{
-		label = "new tab: theta",
+		label = "new tab: omega",
 		action = function(w)
-			new_tab_on(w, "theta")
+			new_tab_on(w, "omega")
 		end,
 	},
 	{
@@ -95,9 +95,9 @@ local menu = {
 		end,
 	},
 	{
-		label = "new tab: omega",
+		label = "new tab: theta",
 		action = function(w)
-			new_tab_on(w, "omega")
+			new_tab_on(w, "theta")
 		end,
 	},
 }
