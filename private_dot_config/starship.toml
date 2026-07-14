@@ -84,8 +84,8 @@ color_yellow = '#d79921'
 [hostname]
 ssh_only = true
 ssh_symbol = " "
-style = "bg:color_orange fg:color_bg1"
-format = "[$ssh_symbol]($style)[SSH@]($style)[$hostname ]($style)[$ssh_symbol]($style)"
+style = "bold bg:color_orange fg:color_bg1"
+format = "[$ssh_symbol$hostname ]($style)"
 
 #
 # INPUT
