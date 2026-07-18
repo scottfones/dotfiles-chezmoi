@@ -11,13 +11,13 @@ local module = {}
 -- function that accepts the config object, like this:
 function module.apply_to_config(config)
 	config.font = wezterm.font_with_fallback({
-		{ family = "FiraCode Nerd Font Propo", weight = 450 },
+		{ family = "Hack Nerd Font Propo", weight = "Regular" },
 		{ family = "CommitMono Nerd Font Propo", weight = "Regular" },
+		{ family = "FiraCode Nerd Font Propo", weight = 450 },
 		{ family = "MonaspiceNe Nerd Font Propo", weight = "Regular" },
 		{ family = "MonaspiceKr Nerd Font Propo", weight = "Medium" },
 		{ family = "MonaspiceAr Nerd Font Propo", weight = "Medium" },
 		{ family = "MonaspiceXe Nerd Font Propo", weight = "Medium" },
-		{ family = "Hack Nerd Font Propo", weight = "Regular" },
 		{ family = "Maple Mono NF CN", weight = "Medium" },
 		{ family = "Symbols Nerd Font", weight = "Regular" },
 		{ family = "Symbols Nerd Font Mono", weight = "Regular" },
