@@ -1,12 +1,18 @@
 [Unit]
-Description=tmux server 
+Description=tmux default session (detached)
 Documentation=man:tmux(1)
+After=graphical-session.target
+PartOf=graphical-session.target
 
 [Service]
 Type=forking
-ExecStart=/usr/bin/tmux new-session -d
-ExecStop=%h/.config/tmux/plugins/tmux-resurrect/scripts/save.sh
+ExecStart=/usr/bin/tmux start-server
+
+ExecStop=/home/scott/.config/tmux/plugins/tmux-resurrect/scripts/save.sh
 ExecStop=/usr/bin/tmux kill-server
+KillMode=control-group
+
+RestartSec=2
 
 [Install]
-WantedBy=default.target
+WantedBy=graphical-session.target
