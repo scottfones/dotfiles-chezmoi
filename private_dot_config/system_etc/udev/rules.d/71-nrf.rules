@@ -1,0 +1,10 @@
+# From NordicSemiconductor/nrf-udev 1.0.1
+# CHange: use plugdev group over 666 permissions
+
+ACTION!="add", SUBSYSTEM!="usb_device", GOTO="nrf_rules_end"
+
+SUBSYSTEM=="usb", ATTRS{idVendor}=="1915", MODE="0660", GROUP="plugdev", TAG+="uaccess"
+
+KERNEL=="ttyACM[0-9]*", SUBSYSTEM=="tty", SUBSYSTEMS=="usb", ATTRS{idVendor}=="1915", MODE="0660", GROUP="plugdev", TAG+="uaccess", ENV{NRF_CDC_ACM}="1"
+
+LABEL="nrf_rules_end"
