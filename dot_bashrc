@@ -39,28 +39,26 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"                   # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" # This loads nvm bash_completion
 
-# A tmux pane inherits SSH_CONNECTION at creation and keeps it forever, so
-# panes restored by continuum at boot never see one, and panes outlive the
-# client that created them. tmux refreshes the session environment on every
-# client attach (update-environment), so pull the live value from there each
-# prompt. Mirror of ~/.config/fish/conf.d/tmux_ssh_env.fish.
-__tmux_sync_ssh_env() {
+# Track the attached tmux client's environment
+__tmux_sync_client_env() {
     [[ -n $TMUX ]] || return
 
-    local entry
-    entry=$(tmux show-environment SSH_CONNECTION 2>/dev/null)
-    if [[ $entry == SSH_CONNECTION=* ]]; then
-        export SSH_CONNECTION="${entry#SSH_CONNECTION=}"
-    else
-        unset SSH_CONNECTION
-    fi
+    local -a vars=(SSH_CONNECTION DISPLAY WAYLAND_DISPLAY)
+    local tmux_env line var
+    tmux_env=$(tmux show-environment 2>/dev/null)
+    for var in "${vars[@]}"; do unset "$var"; done
+    while IFS= read -r line; do
+        for var in "${vars[@]}"; do
+            [[ $line == "$var="* ]] && export "$line"
+        done
+    done <<<"$tmux_env"
 }
 
-if [[ ";${PROMPT_COMMAND[*]:-};" != *";__tmux_sync_ssh_env;"* ]]; then
+if [[ ";${PROMPT_COMMAND[*]:-};" != *";__tmux_sync_client_env;"* ]]; then
     if [[ "$(declare -p PROMPT_COMMAND 2>&1)" == "declare -a"* ]]; then
-        PROMPT_COMMAND=(__tmux_sync_ssh_env "${PROMPT_COMMAND[@]}")
+        PROMPT_COMMAND=(__tmux_sync_client_env "${PROMPT_COMMAND[@]}")
     else
-        PROMPT_COMMAND="__tmux_sync_ssh_env${PROMPT_COMMAND:+;$PROMPT_COMMAND}"
+        PROMPT_COMMAND="__tmux_sync_client_env${PROMPT_COMMAND:+;$PROMPT_COMMAND}"
     fi
 fi
 
