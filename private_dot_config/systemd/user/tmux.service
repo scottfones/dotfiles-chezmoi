@@ -1,8 +1,6 @@
 [Unit]
 Description=tmux default session (detached)
 Documentation=man:tmux(1)
-After=graphical-session.target
-PartOf=graphical-session.target
 
 [Service]
 Type=forking
@@ -15,4 +13,4 @@ KillMode=control-group
 RestartSec=2
 
 [Install]
-WantedBy=graphical-session.target
+WantedBy=default.target
