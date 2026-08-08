@@ -16,6 +16,7 @@ if not set -q __SHELL_ENV_IMPORTED
 end
 
 abbr -a chcd "cd (chezmoi source-path)"
+abbr -a top btop
 abbr -a vim nvim
 
 # Ruby user gem binaries
