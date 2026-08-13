@@ -1,11 +1,13 @@
-arch-reflector
 bat
 burn-central-cli
+cargo-binutils
 cargo-bloat
 cargo-expand
 cargo-generate
+cargo-llvm-cov
 cargo-machete
 cargo-nextest
+cargo-rail
 cargo-show-asm
 cargo-update
 cargo-workspaces
@@ -14,6 +16,7 @@ dysk
 erdtree
 fd-find
 flamegraph
+flip-link
 git-delta
 hyperfine
 just
