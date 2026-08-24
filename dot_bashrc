@@ -43,7 +43,7 @@ export NVM_DIR="$HOME/.nvm"
 __tmux_sync_client_env() {
     [[ -n $TMUX ]] || return
 
-    local -a vars=(SSH_CONNECTION DISPLAY WAYLAND_DISPLAY)
+    local -a vars=(SSH_CONNECTION DISPLAY WAYLAND_DISPLAY XAUTHORITY)
     local tmux_env line var
     tmux_env=$(tmux show-environment 2>/dev/null)
     for var in "${vars[@]}"; do unset "$var"; done
