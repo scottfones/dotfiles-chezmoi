@@ -1,11 +1,17 @@
 -- I am launch_menu.lua and I should live in ~/.config/wezterm/launch_menu.lua
 
 local wezterm = require("wezterm")
+local act = wezterm.action
 
 local module = {}
 
+-- Hosts offered by the "new tab" entries.
+local hosts = { "local", "omega", "pi", "psi", "theta" }
+
+-- Quote session names that come from the prompt.
 local function attach(pane, session)
-	pane:send_text("tmux new-session -A -D -s " .. session .. "\r")
+	local quoted = "'" .. session:gsub("'", [['\'']]) .. "'"
+	pane:send_text("tmux new-session -A -D -s " .. quoted .. "\r")
 end
 
 -- Baseline window.
@@ -33,6 +39,7 @@ local function spawn_attached(mux_win, domain, session)
 	if domain == "local" then
 		attach(new_pane, session)
 	else
+		-- Delay for command processing.
 		wezterm.time.call_after(0.5, function()
 			attach(new_pane, session)
 		end)
@@ -40,7 +47,6 @@ local function spawn_attached(mux_win, domain, session)
 end
 
 -- Build the baseline into the current window.
--- Reuses the active pane as tab 1.
 local function build_baseline(window, pane)
 	local mux_win = window:mux_window()
 	attach(pane, baseline[1].session)
@@ -62,45 +68,34 @@ local function open_coding()
 	end
 end
 
--- Spawn a remote terminal session.
-local function new_tab_on(window, domain)
-	spawn_attached(window:mux_window(), domain, "terminal")
+-- Prompt for a session name, then attach it on the given domain.
+local prompt_session = {}
+for _, domain in ipairs(hosts) do
+	prompt_session[domain] = act.PromptInputLine({
+		description = "tmux session on " .. domain,
+		initial_value = "terminal",
+		action = wezterm.action_callback(function(window, _, line)
+			if line and line ~= "" then
+				spawn_attached(window:mux_window(), domain, line)
+			end
+		end),
+	})
 end
 
 -- Menu entries. Each action receives (window, pane).
 local menu = {
 	{ label = "baseline", action = build_baseline },
-	{
-		label = "coding (omega)",
-		action = function()
-			open_coding()
-		end,
-	},
-	{
-		label = "new tab: omega",
-		action = function(w)
-			new_tab_on(w, "omega")
-		end,
-	},
-	{
-		label = "new tab: pi",
-		action = function(w)
-			new_tab_on(w, "pi")
-		end,
-	},
-	{
-		label = "new tab: psi",
-		action = function(w)
-			new_tab_on(w, "psi")
-		end,
-	},
-	{
-		label = "new tab: theta",
-		action = function(w)
-			new_tab_on(w, "theta")
-		end,
-	},
+	{ label = "coding (omega)", action = open_coding },
 }
+
+for _, domain in ipairs(hosts) do
+	table.insert(menu, {
+		label = "new tab: " .. domain,
+		action = function(window, pane)
+			window:perform_action(prompt_session[domain], pane)
+		end,
+	})
+end
 
 local function menu_choices()
 	local choices = {}
@@ -115,10 +110,10 @@ function module.apply_to_config(config)
 	table.insert(config.keys, {
 		key = "O",
 		mods = "CTRL|SHIFT",
-		action = wezterm.action.InputSelector({
+		action = act.InputSelector({
 			title = "Launch",
 			choices = menu_choices(),
-			action = wezterm.action_callback(function(window, pane, id, label)
+			action = wezterm.action_callback(function(window, pane, id)
 				if not id then
 					return
 				end
