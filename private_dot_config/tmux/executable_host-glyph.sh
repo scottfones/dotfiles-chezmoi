@@ -6,11 +6,15 @@
 [ -n "$1" ] || exit 0
 grep -qz '^SSH_CONNECTION=' "/proc/$1/environ" 2>/dev/null || exit 0
 
-case $(uname -n) in
+# uname -n may be an FQDN; key on the short name, as host_key does in
+# ~/.config/wezterm/tab_label.lua. Unmapped hosts fall back to the name,
+# matching glyphs.lookup returning its key when there is no glyph.
+host=$(uname -n)
+case ${host%%.*} in
     zeta)  printf ' Ζ' ;; # Zeta
     theta) printf ' Θ' ;; # Theta
     pi)    printf ' Π' ;; # Pi
     psi)   printf ' Ψ' ;; # Psi
     omega) printf ' Ω' ;; # Omega
-    *)     printf ' %s' "$(uname -n)" ;;
+    *)     printf ' %s' "${host%%.*}" ;;
 esac
