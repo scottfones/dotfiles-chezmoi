@@ -16,6 +16,7 @@ if not set -q __SHELL_ENV_IMPORTED
 end
 
 abbr -a chcd "cd (chezmoi source-path)"
+abbr -a claude-deno "CLAUDE_CONFIG_DIR=~/.claude-deno claude"
 abbr -a top btop
 abbr -a vim nvim
 
