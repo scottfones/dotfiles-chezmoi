@@ -1,11 +1,13 @@
 bat
 burn-central-cli
 cargo-binutils
+cargo-bisect-rustc
 cargo-bloat
 cargo-expand
 cargo-generate
 cargo-llvm-cov
 cargo-machete
+cargo-mutants
 cargo-nextest
 cargo-rail
 cargo-show-asm
@@ -24,6 +26,7 @@ lsd
 probe-rs-tools
 procs
 ripgrep
+rumdl
 sccache
 sd
 starship
