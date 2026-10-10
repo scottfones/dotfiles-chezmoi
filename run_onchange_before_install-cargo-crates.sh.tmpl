@@ -7,7 +7,7 @@ command -v cargo >/dev/null || { echo "cargo not found; skipping crate install";
 have="$(cargo install --list | grep -E '^[^[:space:]]' | sed 's/ .*//')"
 while IFS= read -r crate; do
     [ -n "$crate" ] || continue
-    grep -qxF "$crate" <<<"$have" || { echo "cargo install ${crate}"; RUSTC_WRAPPER= cargo install "$crate"; }
+    grep -qxF "$crate" <<<"$have" || { echo "cargo install ${crate}"; cargo install "$crate" --locked; }
 done <<'CRATES'
 {{ includeTemplate "cargo-crates.txt" . }}
 CRATES
