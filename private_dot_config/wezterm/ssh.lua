@@ -20,6 +20,11 @@ function module.apply_to_config(config)
 			multiplexing = "None",
 		},
 		{
+			name = "tau",
+			remote_address = "tau",
+			multiplexing = "None",
+		},
+		{
 			name = "theta",
 			remote_address = "theta",
 			multiplexing = "None",

@@ -11,10 +11,11 @@ grep -qz '^SSH_CONNECTION=' "/proc/$1/environ" 2>/dev/null || exit 0
 # matching glyphs.lookup returning its key when there is no glyph.
 host=$(uname -n)
 case ${host%%.*} in
-    zeta)  printf ' Ζ' ;; # Zeta
-    theta) printf ' Θ' ;; # Theta
-    pi)    printf ' Π' ;; # Pi
-    psi)   printf ' Ψ' ;; # Psi
-    omega) printf ' Ω' ;; # Omega
-    *)     printf ' %s' "${host%%.*}" ;;
+omega) printf ' Ω' ;; # Omega
+pi) printf ' Π' ;;    # Pi
+psi) printf ' Ψ' ;;   # Psi
+tau) printf ' Τ' ;;   # Tau
+theta) printf ' Θ' ;; # Theta
+zeta) printf ' Ζ' ;;  # Zeta
+*) printf ' %s' "${host%%.*}" ;;
 esac

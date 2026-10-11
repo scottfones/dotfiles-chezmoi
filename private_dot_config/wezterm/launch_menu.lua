@@ -6,7 +6,7 @@ local act = wezterm.action
 local module = {}
 
 -- Hosts offered by the "new tab" entries.
-local hosts = { "local", "omega", "pi", "psi", "theta" }
+local hosts = { "local", "omega", "pi", "psi", "tau", "theta" }
 
 -- Quote session names that come from the prompt.
 local function attach(pane, session)
@@ -21,6 +21,7 @@ local baseline = {
 	{ domain = "local", session = "media" },
 	{ domain = "theta", session = "terminal" },
 	{ domain = "pi", session = "terminal" },
+	{ domain = "tau", session = "terminal" },
 	{ domain = "psi", session = "terminal" },
 	{ domain = "omega", session = "terminal" },
 }

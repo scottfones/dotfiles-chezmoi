@@ -3,11 +3,12 @@ local glyphs = {}
 
 -- Hosts = Uppercase Greek (hostname or wezterm domain_name)
 glyphs.host = {
-	zeta = utf8.char(0x0396), -- Zeta
-	theta = utf8.char(0x0398), -- Theta
 	pi = utf8.char(0x03A0), -- Pi
 	psi = utf8.char(0x03A8), -- Psi
 	omega = utf8.char(0x03A9), -- Omega
+	tau = utf8.char(0x03A4), -- Tau
+	theta = utf8.char(0x0398), -- Theta
+	zeta = utf8.char(0x0396), -- Zeta
 }
 
 -- Session = Lowercase Greek (tmux #S)
