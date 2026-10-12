@@ -9,6 +9,7 @@ cargo-llvm-cov
 cargo-machete
 cargo-mutants
 cargo-nextest
+cargo-rail
 cargo-show-asm
 cargo-update
 cargo-workspaces
@@ -22,6 +23,7 @@ git-delta
 hyperfine
 just
 lsd
+oxipng
 probe-rs-tools
 procs
 ripgrep
@@ -30,10 +32,12 @@ sccache
 sd
 starship
 tokei
-typstyle
+tree-sitter-cli
 twiggy
+typstyle
 vivid
 wasm-bindgen-cli
 wasm-tools
 watchexec-cli
+websocat
 zoxide

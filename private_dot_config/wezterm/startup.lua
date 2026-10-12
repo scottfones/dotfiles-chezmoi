@@ -10,7 +10,7 @@ local module = {}
 -- function that accepts the config object, like this:
 function module.apply_to_config(config)
 	-- Spawn a fish shell in login mode
-	config.default_prog = { "/usr/bin/fish", "-l" }
+	config.default_prog = { "fish", "-l" }
 	-- config.default_prog = { "/bin/bash", "-l" }
 
 	config.enable_wayland = true

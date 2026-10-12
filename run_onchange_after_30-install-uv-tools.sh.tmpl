@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+# Install uv managed tools.
+set -euo pipefail
+
+export PATH="${HOME}/.local/bin:${PATH}"
+
+command -v uv >/dev/null || { echo "uv not found; skipping tool install"; exit 0; }
+
+while read -ra args; do
+    [ "${#args[@]}" -gt 0 ] || continue
+    echo "uv tool install ${args[*]}"
+    uv tool install "${args[@]}"
+done <<'TOOLS'
+{{ includeTemplate "uv-tools.txt" . }}
+TOOLS

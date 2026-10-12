@@ -1,0 +1,11 @@
+ast-grep-cli
+glances[containers,gpu,web]
+huggingface-hub[mcp]
+jinjanator
+pylatexenc
+ruff
+sqlfluff[rs]
+ssh-audit
+trash-cli
+ty
+--prerelease allow yt-dlp[curl-cffi,default,deno,secretstorage]

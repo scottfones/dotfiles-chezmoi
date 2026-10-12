@@ -1,0 +1,16 @@
+{{ if eq .chezmoi.osRelease.id "arch" -}}
+#!/usr/bin/env bash
+# Build paru from the AUR when it is missing or broken (e.g. after a libalpm soname bump).
+set -euo pipefail
+
+paru --version >/dev/null 2>&1 && exit 0
+
+export PATH="${HOME}/.cargo/bin:${PATH}"
+
+sudo pacman -S --needed base-devel git
+build="$(mktemp -d)"
+trap 'rm -rf "$build"' EXIT
+git clone https://aur.archlinux.org/paru.git "$build/paru"
+cd "$build/paru"
+makepkg -si
+{{ end -}}

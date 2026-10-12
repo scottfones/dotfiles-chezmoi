@@ -2,7 +2,7 @@
 # Bind Ctrl+Alt+C to clip2claude as a GNOME custom keyboard shortcut.
 set -euo pipefail
 
-# No-op outside a live GNOME/dbus session.
+# No-op outside a GNOME/dbus session.
 command -v gsettings >/dev/null || exit 0
 [ -n "${DBUS_SESSION_BUS_ADDRESS:-}" ] || exit 0
 
