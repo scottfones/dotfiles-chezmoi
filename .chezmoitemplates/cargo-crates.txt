@@ -1,43 +1,4 @@
-bat
-burn-central-cli
-cargo-binutils
-cargo-bisect-rustc
-cargo-bloat
-cargo-expand
-cargo-generate
-cargo-llvm-cov
-cargo-machete
-cargo-mutants
-cargo-nextest
-cargo-rail
-cargo-show-asm
-cargo-update
-cargo-workspaces
-dioxus-cli
-dysk
-erdtree
-fd-find
-flamegraph
-flip-link
-git-delta
-hyperfine
-just
-lsd
-oxipng
-probe-rs-tools
-procs
-ripgrep
-rumdl
-sccache
-sd
-starship
-tokei
-tree-sitter-cli
-twiggy
-typstyle
-vivid
-wasm-bindgen-cli
-wasm-tools
-watchexec-cli
-websocat
-zoxide
+{{- /* Renders this host's cargo list: base plus the groups in packages.hosts. */ -}}
+{{- $groups := concat (list "base") (index .packages.hosts .chezmoi.hostname | default list) -}}
+{{- range $groups }}{{ range index $.packages.cargo . }}
+{{ . }}{{ end }}{{ end }}

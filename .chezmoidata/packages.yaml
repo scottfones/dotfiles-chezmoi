@@ -1,0 +1,71 @@
+# User-space tools by group. Every host gets `base`.
+packages:
+  hosts:
+    omega: [dev, embedded]
+    pi: []
+    psi: [dev]
+    tau: []
+    zeta: [dev, embedded]
+
+  cargo:
+    base:
+      - bat
+      - cargo-update
+      - dysk
+      - erdtree
+      - fd-find
+      - git-delta
+      - just
+      - lsd
+      - oxipng
+      - procs
+      - ripgrep
+      - rumdl
+      - sccache
+      - sd
+      - starship
+      - tree-sitter-cli
+      - typstyle
+      - vivid
+      - websocat
+      - zoxide
+    dev:
+      - burn-central-cli
+      - cargo-bisect-rustc
+      - cargo-bloat
+      - cargo-expand
+      - cargo-generate
+      - cargo-llvm-cov
+      - cargo-machete
+      - cargo-mutants
+      - cargo-nextest
+      - cargo-rail
+      - cargo-show-asm
+      - cargo-workspaces
+      - dioxus-cli
+      - flamegraph
+      - hyperfine
+      - tokei
+      - twiggy
+      - wasm-bindgen-cli
+      - wasm-tools
+      - watchexec-cli
+    embedded:
+      - cargo-binutils
+      - flip-link
+      - probe-rs-tools
+
+  uv:
+    base:
+      - ast-grep-cli
+      - "glances[containers,gpu,web]"
+      - jinjanator
+      - pylatexenc
+      - ruff
+      - "sqlfluff[rs]"
+      - ssh-audit
+      - trash-cli
+      - ty
+    dev:
+      - "huggingface-hub[mcp]"
+      - "--prerelease allow yt-dlp[curl-cffi,default,deno,secretstorage]"

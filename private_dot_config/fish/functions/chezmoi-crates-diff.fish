@@ -1,12 +1,10 @@
-function chezmoi-crates-diff --description "Diff installed crates against chezmoi manifest"
-    set -l manifest (chezmoi source-path)/.chezmoitemplates/cargo-crates.txt
-    if not test -f $manifest
-        echo "cargo-crates manifest not found: $manifest" >&2
-        return 1
-    end
-
-    set -l installed (cargo install --list | grep -E '^[^[:space:]]' | sed 's/ .*//' | sort -u)
-    set -l listed (grep -vE '^[[:space:]]*$' $manifest | sort -u)
+function chezmoi-crates-diff --description "Diff installed crates against this host's chezmoi manifest"
+    set -l installed (cargo install --list | string match -rv '^\s' | string replace -r ' .*' '' | sort -u)
+    # fish is installed by its own chezmoi script, not the manifest.
+    set -l listed (begin
+            chezmoi execute-template '{{ includeTemplate "cargo-crates.txt" . }}' | string match -rv '^\s*$'
+            echo fish
+        end | sort -u)
 
     echo "Installed but not in manifest:"
     comm -23 (printf '%s\n' $installed | psub) (printf '%s\n' $listed | psub) | sed 's/^/    /'
