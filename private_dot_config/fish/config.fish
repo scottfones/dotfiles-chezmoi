@@ -26,7 +26,6 @@ for gem_bin in $HOME/.local/share/gem/ruby/*/bin
 end
 
 # Tool inits
-bass source ~/.nvm/nvm.sh
 starship init fish | source
 zoxide init fish | source
 

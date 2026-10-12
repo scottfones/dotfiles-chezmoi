@@ -35,10 +35,6 @@ for _gem_bin in "$HOME/.local/share/gem/ruby/"*/bin; do
 done
 unset _gem_bin
 
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"                   # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" # This loads nvm bash_completion
-
 # Track the attached tmux client's environment
 __tmux_sync_client_env() {
     [[ -n $TMUX ]] || return
