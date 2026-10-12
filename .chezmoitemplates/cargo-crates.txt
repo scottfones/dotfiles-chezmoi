@@ -30,6 +30,7 @@ sccache
 sd
 starship
 tokei
+typstyle
 twiggy
 vivid
 wasm-bindgen-cli
