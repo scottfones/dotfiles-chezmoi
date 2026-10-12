@@ -41,7 +41,7 @@ local function spawn_attached(mux_win, domain, session)
 		attach(new_pane, session)
 	else
 		-- Delay for command processing.
-		wezterm.time.call_after(0.5, function()
+		wezterm.time.call_after(1.5, function()
 			attach(new_pane, session)
 		end)
 	end
