@@ -1,38 +1,68 @@
 [global]
-exclude = ["node_modules", "build", "dist", "target"]
-flavor = "standard"
+cache-dir = "~/.cache/rumdl"
+extend-enable = [
+  "MD060", # Table Format
+  "MD070", # Nested Code Fence Collision
+  "MD073", # Table of Contents Validation
+  "MD080", # Unique Heading Anchors
+  "MD084", # Invisible Unicode Characters
+  "MD085", # Paragraph Continuation Indent
+  "MD087", # Unused Disable Comment
+  "MD088", # Quotes and Dashes
+  "MD091", # No Markdown In HTML
+]
 line-length = 100
-respect-gitignore = true
 
-# Per-file flavor overrides
-[per-file-flavor]
-"**/*.mdx" = "mdx"
-
-# Disable specific rules for specific files
 [per-file-ignores]
-"README.md" = ["MD033"]  # Allow HTML in README
-"SUMMARY.md" = ["MD025"]  # Allow multiple H1 in table of contents
+# Allow HTML in README
+"README.md" = ["MD033"]
+# Rust doc-comment line length excludes /// prefix and indent
 "**/*.rs" = ["MD013"]
 
-# Configure individual rules
-[MD007]
-indent = 2
+# Heading style: "atx" = #
+[MD003]
+style = "atx"
 
+# Bullet list marker
+[MD004]
+style = "dash"
+
+# Line length
 [MD013]
 code-blocks = false
-line-length = 100
 reflow = true
 tables = false
 
-[MD025]
-front-matter-title = "title"
-level = 1
-
+# Proper name capitalization
 [MD044]
-names = ["rumdl", "Markdown", "GitHub"]
+names = ["GitHub", "Markdown"]
+whole-words = true
 
+# Code block style
+[MD046]
+style = "fenced"
+
+# Code fence character
 [MD048]
 style = "backtick"
 
+# Italic marker
+[MD049]
+style = "asterisk"
+
+# Bold marker
+[MD050]
+style = "asterisk"
+
+# Table Format
+[MD060]
+style = "aligned"
+
+# Unique Heading Anchors
+[MD080]
+anchor-style = "github"
+
+# ASCII quotes and dashes
 [MD088]
 normalize-dashes = true
+normalize-quotes = true
