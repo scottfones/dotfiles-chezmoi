@@ -1,0 +1,22 @@
+#!{{ .chezmoi.homeDir }}/.cargo/bin/fish --no-config
+# claude-format-hook - format the files that a Claude Code Write, Edit or Bash call changed
+
+# Format one file with the formatter for its extension.
+function format_file -a file
+    switch $file
+        case '*.md'
+            rumdl fmt $file
+        case '*.py'
+            ruff format $file
+        case '*.rs'
+            # rustfmt wraps doc comments first, then rumdl fixes their Markdown.
+            rustfmt --edition 2024 $file && rumdl fmt $file
+    end
+end
+
+set rc 0
+jq -r '.tool_input.file_path // .tool_response.bashEditDiff?.changedFiles[]?' | while read -l file
+    test -f $file || continue # Bash can delete listed files
+    format_file $file || set rc $status
+end
+exit $rc

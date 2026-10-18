@@ -1,0 +1,20 @@
+#!{{ .chezmoi.homeDir }}/.cargo/bin/fish --no-config
+# clip2claude - rsync the newest GNOME screenshot to omega's tmpfs for claude code
+
+set remote omega
+set dest /tmp/claude-shots
+set src $HOME/Pictures/Screenshots
+
+function fail
+    notify-send -u critical clip2claude $argv[1]
+    exit 1
+end
+
+# Newest screenshot
+set latest (find $src -maxdepth 1 -type f -name '*.png' -printf '%T@\t%p\n' | sort -nr | string split -m1 -f2 \t)[1]
+test -n "$latest" || fail "no screenshot in $src"
+
+set safe (path basename $latest | string replace -a ' ' -)
+rsync -a --mkpath $latest $remote:$dest/$safe || fail "rsync to $remote failed"
+printf '%s/%s' $dest $safe | wl-copy || fail "wl-copy failed"
+notify-send clip2claude "$safe -> $remote:$dest"
