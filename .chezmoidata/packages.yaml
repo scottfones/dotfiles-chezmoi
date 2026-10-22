@@ -7,6 +7,11 @@ packages:
     tau: []
     zeta: [dev, embedded]
 
+  # OS packages by .chezmoi.osRelease.id.
+  system:
+    arch: [github-cli, neovim, openssl]
+    debian: [build-essential, gh, libssl-dev, pkg-config]
+
   cargo:
     base:
       - bat

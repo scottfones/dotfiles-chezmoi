@@ -1,0 +1,20 @@
+{{ $pkgs := index .packages.system .chezmoi.osRelease.id | default list -}}
+{{ if $pkgs -}}
+#!/usr/bin/env bash
+# Install this distro's OS packages from packages.system.
+set -euo pipefail
+
+{{ if eq .chezmoi.osRelease.id "arch" -}}
+sudo pacman -S --needed {{ $pkgs | join " " }}
+{{- else if eq .chezmoi.osRelease.id "debian" -}}
+# Debian's gh lags upstream badly; add the GitHub CLI apt source (cli/cli docs/install_linux.md).
+if [ ! -f /etc/apt/sources.list.d/github-cli.list ]; then
+    curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg \
+        | sudo install -D -m 644 /dev/stdin /etc/apt/keyrings/githubcli-archive-keyring.gpg
+    echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" \
+        | sudo install -m 644 /dev/stdin /etc/apt/sources.list.d/github-cli.list
+fi
+sudo apt-get update
+sudo apt-get install -y {{ $pkgs | join " " }}
+{{- end }}
+{{ end -}}

@@ -3,6 +3,11 @@
 # Generated artifacts
 .config/environment.d/ls-colors.conf
 
+# Debian exclusive (Arch gets neovim from pacman)
+{{- if ne .chezmoi.osRelease.id "debian" }}
+.local/bin/nvim
+{{- end }}
+
 # Omega ignores
 {{- if eq .chezmoi.hostname "omega" }}
 .config/kitty
