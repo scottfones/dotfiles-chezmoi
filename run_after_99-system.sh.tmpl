@@ -59,7 +59,8 @@ pwfile="$(mktemp "${XDG_RUNTIME_DIR:-/tmp}/ansible-become.XXXXXX")"
 trap 'rm -f "$out" "$pwfile"' EXIT
 printf '%s\n' "$pw" >"$pwfile"
 unset pw
-play() { ansible-playbook -i "${host}," site.yml --become-password-file "$pwfile" "$@"; }
+# ansible does not flush its output; unbuffered, prompts reach the screen through tee.
+play() { PYTHONUNBUFFERED=1 ansible-playbook -i "${host}," site.yml --become-password-file "$pwfile" "$@"; }
 
 banner "CHECK (dry run)"
 rc=0
