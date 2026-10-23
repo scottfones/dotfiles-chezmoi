@@ -53,12 +53,15 @@ read -rsp "sudo password for ${host}: " pw
 echo
 printf '%s\n' "$pw" | sudo -k -S -p '' -v 2>/dev/null || { echo "Incorrect sudo password; not applied." >&2; exit 1; }
 
-# "-" reads the password from stdin; ansible resolves other paths, which breaks <(...).
-play() { printf '%s\n' "$pw" | ansible-playbook -i "${host}," site.yml --become-password-file - "$@"; }
+# A private file, not stdin, so plays can still prompt; ansible resolves the path, which rules out <(...).
+out="$(mktemp)"
+pwfile="$(mktemp "${XDG_RUNTIME_DIR:-/tmp}/ansible-become.XXXXXX")"
+trap 'rm -f "$out" "$pwfile"' EXIT
+printf '%s\n' "$pw" >"$pwfile"
+unset pw
+play() { ansible-playbook -i "${host}," site.yml --become-password-file "$pwfile" "$@"; }
 
 banner "CHECK (dry run)"
-out="$(mktemp)"
-trap 'rm -f "$out"' EXIT
 rc=0
 play --check --diff | tee "$out" || rc=$?
 # ansible-playbook exits 2 when tasks fail; anything else is a tool or setup error.
@@ -78,6 +81,8 @@ else
 fi
 
 banner "APPLY"
-play --diff
+play --diff | tee "$out"
 record
 banner "DONE"
+reboot="$(grep -o "REBOOT REQUIRED: [^'\"]*" "$out" | tail -n 1 || true)"
+[ -z "$reboot" ] || printf '\033[1;31m%s\033[0m\n' "$reboot"
