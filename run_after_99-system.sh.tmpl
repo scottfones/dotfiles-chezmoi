@@ -1,0 +1,83 @@
+#!/usr/bin/env bash
+# Apply system-level config with ansible. Runs last.
+set -euo pipefail
+
+export PATH="${HOME}/.local/bin:${PATH}"
+
+command -v ansible-playbook >/dev/null || { echo "ansible-playbook not found; skipping system setup"; exit 0; }
+
+host={{ .chezmoi.hostname | quote }}
+state="${XDG_STATE_HOME:-${HOME}/.local/state}/chezmoi-system/applied"
+repo=git@github.com:scottfones/system-ansible.git
+dir="${XDG_DATA_HOME:-${HOME}/.local/share}/system-ansible"
+
+# Private repo: reachable only once the GitHub key is registered.
+if [ -d "${dir}/.git" ]; then
+    git -C "$dir" pull --ff-only --quiet || echo "warning: could not update ${dir}; using the local copy" >&2
+elif ! git clone --quiet "$repo" "$dir"; then
+    echo "System repo not reachable yet: add ~/.ssh/github_ed25519 to GitHub, then run chezmoi apply again."
+    exit 0
+fi
+
+cd "$dir"
+export ANSIBLE_CONFIG="${PWD}/ansible.cfg" ANSIBLE_FORCE_COLOR=1
+
+banner() { printf '\n\033[1;35m==== SYSTEM %s : %s ====\033[0m\n' "$host" "$1"; }
+confirm() { local ans; read -rp "$1 [y/N] " ans; [[ "$ans" == [yY]* ]]; }
+record() { mkdir -p "${state%/*}"; printf '%s\n' "$hash" >"$state"; }
+
+# Hash of tracked and untracked (not ignored) files, by working-tree content.
+# Files deleted but not yet committed are still listed; they drop out of the hash.
+hash="$(git ls-files -z --cached --others --exclude-standard | { xargs -0 sha256sum 2>/dev/null || true; } | sha256sum | cut -d' ' -f1)"
+[ -f "$state" ] && [ "$(cat "$state")" = "$hash" ] && exit 0
+
+banner "PENDING"
+
+# Every config payload, vars file, and doc is vaulted.
+plain="$(git ls-files -z --cached --others --exclude-standard -- '*/files/*' '*/templates/*' '*/vars/*' '*/defaults/*' 'group_vars/*' 'host_vars/*' '*.md' |
+    xargs -0 -r grep -sL '^\$ANSIBLE_VAULT;' -- || true)"
+if [ -n "$plain" ]; then
+    printf 'Refusing to run: not vault-encrypted:\n%s\n' "$plain" >&2
+    exit 1
+fi
+
+confirm "System config changed since it was last applied to ${host}. Run system setup now?" ||
+    { echo "Skipped; you will be asked again on the next chezmoi apply."; exit 0; }
+
+if [ -f requirements.yml ]; then
+    ansible-galaxy collection install -r requirements.yml -p ./collections >/dev/null ||
+        { echo "Could not install the ansible collections; not applied." >&2; exit 1; }
+fi
+
+read -rsp "sudo password for ${host}: " pw
+echo
+printf '%s\n' "$pw" | sudo -k -S -p '' -v 2>/dev/null || { echo "Incorrect sudo password; not applied." >&2; exit 1; }
+
+# "-" reads the password from stdin; ansible resolves other paths, which breaks <(...).
+play() { printf '%s\n' "$pw" | ansible-playbook -i "${host}," site.yml --become-password-file - "$@"; }
+
+banner "CHECK (dry run)"
+out="$(mktemp)"
+trap 'rm -f "$out"' EXIT
+rc=0
+play --check --diff | tee "$out" || rc=$?
+# ansible-playbook exits 2 when tasks fail; anything else is a tool or setup error.
+if [ "$rc" -eq 2 ]; then
+    confirm "The dry run reported task failures (expected on a host's first run). Apply anyway?" ||
+        { echo "Not applied; you will be asked again on the next chezmoi apply."; exit 0; }
+elif [ "$rc" -ne 0 ]; then
+    echo "Dry run failed (ansible-playbook exit ${rc}); not applied." >&2
+    exit 1
+elif ! grep -qE 'changed=[1-9]' "$out"; then
+    banner "DONE"
+    echo "Nothing to change."
+    record
+    exit 0
+else
+    confirm "Apply these changes?" || { echo "Not applied; you will be asked again on the next chezmoi apply."; exit 0; }
+fi
+
+banner "APPLY"
+play --diff
+record
+banner "DONE"

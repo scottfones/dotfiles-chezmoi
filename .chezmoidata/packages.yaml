@@ -63,6 +63,7 @@ packages:
 
   uv:
     base:
+      - "--python 3.14 ansible-core" # breaks on 3.15. drop pin once 3.15 is supported
       - ast-grep-cli
       - "glances[containers,gpu,web]"
       - jinjanator

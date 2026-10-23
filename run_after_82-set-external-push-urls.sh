@@ -10,7 +10,8 @@ for repo in nvim claude-starship-rs git-last-commit-rs; do
   [ -d "${dir}/.git" ] || continue
 
   fetch="$(git -C "${dir}" remote get-url origin)"
-  ssh_url="git@github.com:${fetch#https://github.com/}"
+  # The fetch url may be ssh (git@github.com:) or https (https://github.com/).
+  ssh_url="git@github.com:${fetch#*github.com[:/]}"
   current="$(git -C "${dir}" remote get-url --push origin 2>/dev/null || true)"
 
   if [ "${current}" != "${ssh_url}" ]; then

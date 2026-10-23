@@ -4,6 +4,10 @@
 # Install this distro's OS packages from packages.system.
 set -euo pipefail
 
+# Drop cached sudo credentials so the prompt below always appears.
+sudo -K
+sudo -p "[chezmoi] password to install system packages ({{ $pkgs | join " " }}): " -v
+
 {{ if eq .chezmoi.osRelease.id "arch" -}}
 sudo pacman -S --needed {{ $pkgs | join " " }}
 {{- else if eq .chezmoi.osRelease.id "debian" -}}

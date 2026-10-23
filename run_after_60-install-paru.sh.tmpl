@@ -7,6 +7,10 @@ paru --version >/dev/null 2>&1 && exit 0
 
 export PATH="${HOME}/.cargo/bin:${PATH}"
 
+# Drop cached sudo credentials.
+sudo -K
+sudo -p "[chezmoi] password to build and install paru (pacman -S base-devel git, makepkg -si): " -v
+
 sudo pacman -S --needed base-devel git
 build="$(mktemp -d)"
 trap 'rm -rf "$build"' EXIT
