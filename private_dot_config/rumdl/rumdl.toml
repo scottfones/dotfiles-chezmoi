@@ -14,10 +14,14 @@ extend-enable = [
 line-length = 100
 
 [per-file-ignores]
+# GitHub posts render line breaks and have no top-level heading
+"**/*.gh_post.md" = ["MD013", "MD041"]
+# Line length excludes `/// `
+"**/*.rs" = ["MD013"]
+# Must stay one line per entry
+"**/memory/MEMORY.md" = ["MD013"]
 # Allow HTML in README
 "README.md" = ["MD033"]
-# Rust doc-comment line length excludes /// prefix and indent
-"**/*.rs" = ["MD013"]
 
 # Heading style: "atx" = #
 [MD003]
@@ -32,6 +36,10 @@ style = "dash"
 code-blocks = false
 reflow = true
 tables = false
+
+# Missing space after hash in heading
+[MD018]
+magiclink = true
 
 # Proper name capitalization
 [MD044]
