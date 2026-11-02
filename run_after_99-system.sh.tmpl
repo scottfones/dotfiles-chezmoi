@@ -18,6 +18,7 @@ elif ! git clone --quiet "$repo" "$dir"; then
     echo "System repo not reachable yet: add ~/.ssh/github_ed25519 to GitHub, then run chezmoi apply again."
     exit 0
 fi
+git -C "$dir" config core.hooksPath .githooks
 
 cd "$dir"
 export ANSIBLE_CONFIG="${PWD}/ansible.cfg" ANSIBLE_FORCE_COLOR=1
