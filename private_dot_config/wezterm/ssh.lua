@@ -16,7 +16,7 @@ function module.apply_to_config(config)
 		},
 		{
 			name = "psi",
-			remote_address = "psi",
+			remote_address = "psi-wifi",
 			multiplexing = "None",
 		},
 		{
