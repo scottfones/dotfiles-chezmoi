@@ -15,6 +15,7 @@ if not set -q __SHELL_ENV_IMPORTED
     end
 end
 
+abbr -a ansi-edit "EDITOR='nvim -n -i NONE -c \"setlocal noundofile\"' ansible-vault edit --vault-password-file ~/.config/ansible/vault-pass"
 abbr -a chcd "cd (chezmoi source-path)"
 abbr -a claude-deno "CLAUDE_CONFIG_DIR=~/.claude-deno claude"
 abbr -a top btop
