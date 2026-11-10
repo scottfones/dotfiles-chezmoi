@@ -53,6 +53,7 @@ packages:
       - hyperfine
       - tokei
       - twiggy
+      - typos-cli
       - wasm-bindgen-cli
       - wasm-tools
       - watchexec-cli
