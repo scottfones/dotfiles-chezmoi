@@ -6,6 +6,17 @@ export PATH="${HOME}/.cargo/bin:${PATH}"
 
 command -v cargo >/dev/null || { echo "cargo not found; skipping crate install"; exit 0; }
 
+{{ if contains "fuse-ld=mold" (includeTemplate "dot_cargo/config.toml.tmpl" .) -}}
+# The cargo config names mold and sccache. Override each setting while its tool is absent.
+(
+    command -v ld.mold >/dev/null || export RUSTFLAGS="-C target-cpu=native"
+    command -v sccache >/dev/null || export RUSTC_WRAPPER=
+    echo "cargo install mold"
+    cargo install --git https://github.com/rui314/mold --branch stable --locked mold-cli
+)
+ln -sf mold "${HOME}/.cargo/bin/ld.mold"
+
+{{ end -}}
 # Install sccache.
 command -v sccache >/dev/null || { echo "cargo install sccache"; RUSTC_WRAPPER= cargo install sccache --locked; }
 
