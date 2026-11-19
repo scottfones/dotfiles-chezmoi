@@ -32,6 +32,7 @@
 #  Zeta exclusive
 {{- if ne .chezmoi.hostname "zeta" }}
 .config/fish/conf.d/zeta.fish
+.config/fish/functions/ghostty-baseline.fish
 .config/fish/functions/webmd.fish
 .config/system_etc/thinkfan.conf
 .config/system_etc/modprobe.d/thinkpad-psmouse.conf

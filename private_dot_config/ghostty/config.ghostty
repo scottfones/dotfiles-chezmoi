@@ -1,0 +1,43 @@
+command = fish -l
+
+# Font
+font-family = FiraCode Nerd Font Propo
+font-family = Hack Nerd Font Propo
+font-family = MonaspiceNe Nerd Font Propo
+font-family = CommitMono Nerd Font Propo
+font-family = MonaspiceKr Nerd Font Propo
+font-family = MonaspiceAr Nerd Font Propo
+font-family = MonaspiceXe Nerd Font Propo
+font-family = Maple Mono NF CN
+font-family = Symbols Nerd Font
+font-family = Symbols Nerd Font Mono
+font-family = Inconsolata LGC Nerd Font Propo
+font-size = 13
+
+
+# Mouse Selection
+selection-background = #40334d
+selection-foreground = cell-foreground
+
+# Theme
+# theme = Adwaita Dark
+# theme = Builtin Tango Dark
+# theme = GitHub Dark Default
+# theme = Gruvbox Material
+# theme = iTerm2 Dark Background
+theme = Kitty Default
+
+# Window
+background = #000000
+background-opacity = 0.75
+cursor-color = #52ad70
+cursor-opacity = 0.8
+cursor-style = block
+cursor-style-blink = true
+foreground = #cdcdcd
+maximize = true
+
+command-palette-entry = title:Baseline,description:"Open the baseline tmux tabs in this window.",action:"text:ghostty-baseline\r"
+
+# Modules
+config-file = keybinds.ghostty

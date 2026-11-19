@@ -1,0 +1,3 @@
+keybind = ctrl+shift+,=move_tab:-1
+keybind = ctrl+shift+.=move_tab:1
+keybind = shift+enter=text:\x1b\r
