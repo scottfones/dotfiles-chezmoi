@@ -35,6 +35,7 @@ cursor-opacity = 0.8
 cursor-style = block
 cursor-style-blink = true
 foreground = #cdcdcd
+gtk-titlebar-hide-when-maximized = true
 maximize = true
 
 command-palette-entry = title:Baseline,description:"Open the baseline tmux tabs in this window.",action:"text:ghostty-baseline\r"
